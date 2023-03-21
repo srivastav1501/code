@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Body from './components/Body';
+import Window from './components/Window'
+import Data from './components/Data'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const [Candidates, setCandidates] = useState(Data);
+    const [ide, setId] =useState();
+    const [open , setOpen] = useState(false);
+    const [stage, setStage]= useState();
+
+    const newCandidate = (id,photo, name, location, date, Stage)=>{
+      let  newEmp = {
+              id:id,
+              Candidate_name: name,
+              Photo: photo,
+              Location: location,
+              Date_Applied: date,
+              Stage : Stage,
+        }
+         setCandidates([...Candidates,newEmp]);
+       }
+ return(
+  <div className='container'>
+    <Window switch={open} setSwitch={setOpen} stage={stage} setId={setId} newCandidate={newCandidate}/>
+   <Body setSwitch={setOpen}  setStage={setStage} ide={ide} setId={setId}  setCandidates={setCandidates} Candidates={Candidates}/>
+  </div>
+ )
+};
 
 export default App;
+
