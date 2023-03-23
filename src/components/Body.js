@@ -2,6 +2,7 @@ import React from 'react';
 import './body.css';
 import { Button } from '@mui/material';
 import { useState } from 'react';
+import AddIcon from '@mui/icons-material/Add';
 
 
 const Body = (props) => {
@@ -14,7 +15,7 @@ const dragStarted=(e)=>{
   props.setId(()=>e.target.id)
   let st = e.target.parentNode.firstChild.innerText;
   e.dataTransfer.setData('stage', st)
-   console.log(props.ide)
+  //  console.log(props.ide)
 }
  
 const draging = (e)=>{
@@ -23,20 +24,31 @@ const draging = (e)=>{
   let elem = '';
     if(e.target.parentNode.classList.contains('id-card')){
        elem = e.target.parentNode.parentNode;
-    }else{
+      }
+      else if(e.target.parentNode.classList.contains('body-section')){
+        // console.log("body")
+        elem = e.target.parentNode;
+      }
+    else if(e.target.parentNode.classList.contains('loc')){
+      elem = e.target.parentNode.parentNode.parentNode;
+    } 
+    else if(e.target.parentNode.classList.contains('dat')){
+      elem = e.target.parentNode.parentNode.parentNode;
+    }   
+    else{
       elem = e.target.parentNode;
     }
    setD(elem.firstChild.innerText);
-    
+    // console.log(data);
   }
   
   const dragDroped= async(e)=>{
     
-    console.log(props.ide)
+    // console.log(props.ide)
     const cnd =await props.Candidates.filter((itm)=>parseInt(itm.id) === parseInt(props.ide));
     
     cnd[0].Stage=data;
-    console.log(cnd[0].id)
+    // console.log(cnd[0].id)
     
     const cd = await props.Candidates.filter((itm)=>parseInt(itm.id) !== parseInt(props.ide));
     props.setCandidates([...cd,...cnd]);
@@ -45,7 +57,7 @@ const draging = (e)=>{
   }
   
   return (
-    <div droppable='true' className='body'>
+    <div className='body'>
       {sections.map((section, index) => (
         <div droppable='true' key={index} id={section} className="body-section">
           <h2 className='head'>{section}</h2>
@@ -55,11 +67,11 @@ const draging = (e)=>{
               <div draggable onDragStart={(e)=>dragStarted(e)}  onDragOver={(e)=>draging(e)} key={index} onDrop={(e)=>dragDroped(e)} id={candidate.id} className="id-card">
                 <img draggable={false} src={candidate.Photo} alt="candidate" />
                 <h3>{candidate.Candidate_name}</h3>
-                <p><strong>Location:</strong> {candidate.Location}</p>
-                <p><strong>Date Applied:</strong> {candidate.Date_Applied}</p>
+                <p className='loc'><strong>Location:</strong> {candidate.Location}</p>
+                <p className='dat'><strong >Date Applied:</strong> {candidate.Date_Applied}</p>
               </div>
             ))}
-              <Button variant='outlined' fontSize="Large" sx={{fortWeight:'bold'}} Size='Medium' onClick={()=>{props.setSwitch(true); props.setStage(section)}} value={section}>+</Button>
+              <Button variant='outlined' fontSize="Large"  size='Medium' onClick={()=>{props.setSwitch(true); props.setStage(section)}} value={section}><AddIcon /></Button>
               
         </div>
       ))}
